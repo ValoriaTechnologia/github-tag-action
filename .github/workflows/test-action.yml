@@ -1,0 +1,31 @@
+name: Test action (integration)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: tag_version
+        uses: .
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+
+      - name: Verify action outputs
+        run: |
+          echo "previous_tag: ${{ steps.tag_version.outputs.previous_tag }}"
+          echo "new_tag: ${{ steps.tag_version.outputs.new_tag }}"
+          echo "release_type: ${{ steps.tag_version.outputs.release_type }}"
+          if [ -z "${{ steps.tag_version.outputs.previous_tag }}" ]; then
+            echo "::error::previous_tag should be set"
+            exit 1
+          fi
+          echo "Action ran successfully."
