@@ -4,8 +4,16 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   integration-job:
     uses: ./.github/workflows/integration-tests.yml
   unit-tests-job:
     uses: ./.github/workflows/unit-tests.yml
+  release-job:
+    needs:
+      - integration-job
+      - unit-tests-job
+    uses: ./.github/workflows/release.yml
