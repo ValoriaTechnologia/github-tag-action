@@ -1,6 +1,8 @@
 # GitHub Tag Action
 
-A GitHub Action to automatically bump and tag master, on merge, with the latest SemVer formatted version. Works on any platform.
+A GitHub Action to automatically bump and tag your branch (e.g. `main`), on merge, with the latest SemVer formatted version. Works on any platform.
+
+This repository is a fork of [mathieudutour/github-tag-action](https://github.com/mathieudutour/github-tag-action). Use `ValoriaTechnologia/github-tag-action@main` or a specific tag (e.g. `@v6.2`) in your workflows.
 
 This action runs inside a Docker container. When using self-hosted runners, the runner must be Linux with Docker installed.
 
@@ -11,7 +13,7 @@ name: Bump version
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Bump version and push tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: ValoriaTechnologia/github-tag-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create a GitHub release
@@ -28,6 +30,19 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+```
+
+### Dry run (compute version without pushing a tag)
+
+To only compute the next version and changelog without creating or pushing a tag, use `dry_run: true`:
+
+```yaml
+- uses: ValoriaTechnologia/github-tag-action@main
+  id: tag_version
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    dry_run: true
+# Use steps.tag_version.outputs.new_tag, steps.tag_version.outputs.changelog, etc.
 ```
 
 ### 📥 Inputs
@@ -52,7 +67,7 @@ jobs:
 - **create_annotated_tag** _(optional)_ - Boolean to create an annotated rather than a lightweight one (default: `false`).
 - **tag_prefix** _(optional)_ - A prefix to the tag name (default: `v`).
 - **append_to_pre_release_tag** _(optional)_ - A suffix to the pre-release tag name (default: `<branch>`).
-- **commit_analyzer_preset** _(optional)_ - A supported `conventional-changelog` preset (default: `angular`). See ![list of supported values](https://github.com/semantic-release/commit-analyzer#options)
+- **commit_analyzer_preset** _(optional)_ - A supported `conventional-changelog` preset (default: `angular`). See [list of supported values](https://github.com/semantic-release/commit-analyzer#options)
 
 #### Customize the conventional commit messages & titles of changelog sections
 
@@ -91,47 +106,15 @@ By default semantic-release uses [Angular Commit Message Conventions](https://gi
 
 Here is an example of the release type that will be done based on a commit messages:
 
-<table>
-<tr>
-<td> Commit message </td> <td> Release type </td>
-</tr>
-<tr>
-<td>
-
-```
-fix(pencil): stop graphite breaking when too much pressure applied
-```
-
-</td>
-<td>Patch Release</td>
-</tr>
-<tr>
-<td>
-
-```
-feat(pencil): add 'graphiteWidth' option
-```
-
-</td>
-<td>Minor Release</td>
-</tr>
-<tr>
-<td>
-
-```
-perf(pencil): remove graphiteWidth option
-
-BREAKING CHANGE: The graphiteWidth option has been removed.
-The default graphite width of 10mm is always used for performance reasons.
-```
-
-</td>
-<td>Major Release</td>
-</tr>
-</table>
+| Commit message | Release type |
+|----------------|--------------|
+| `fix(pencil): stop graphite breaking when too much pressure applied` | Patch Release |
+| `feat(pencil): add 'graphiteWidth' option` | Minor Release |
+| `perf(pencil): remove graphiteWidth option`<br><br>`BREAKING CHANGE: The graphiteWidth option has been removed.`<br>`The default graphite width of 10mm is always used for performance reasons.` | Major Release |
 
 If no commit message contains any information, then **default_bump** will be used.
 
 ## Credits
 
-[anothrNick/github-tag-action](https://github.com/anothrNick/github-tag-action) - a similar action using a Dockerfile (hence not working on macOS)
+- [mathieudutour/github-tag-action](https://github.com/mathieudutour/github-tag-action) - original project
+- [anothrNick/github-tag-action](https://github.com/anothrNick/github-tag-action) - a similar action using a Dockerfile (hence not working on macOS)
