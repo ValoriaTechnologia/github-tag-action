@@ -2,6 +2,8 @@
 
 A GitHub Action to automatically bump and tag master, on merge, with the latest SemVer formatted version. Works on any platform.
 
+This action runs inside a Docker container. When using self-hosted runners, the runner must be Linux with Docker installed.
+
 ## Usage
 
 ```yaml

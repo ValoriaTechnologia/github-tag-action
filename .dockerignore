@@ -1,0 +1,16 @@
+node_modules
+.git
+lib
+tests
+.github
+*.test.ts
+.vscode
+.cursor
+*.md
+!README.md
+.gitignore
+.env
+*.log
+coverage
+.nyc_output
+*.plan.md
