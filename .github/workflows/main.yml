@@ -12,8 +12,21 @@ jobs:
     uses: ./.github/workflows/integration-tests.yml
   unit-tests-job:
     uses: ./.github/workflows/unit-tests.yml
-  release-job:
+  bump-job:
     needs:
       - integration-job
       - unit-tests-job
+    uses: ./.github/workflows/bump.yml
+  build-push-job:
+    needs:
+      - bump-job
+    uses: ./.github/workflows/build-push.yml
+    with:
+      tag: ${{ jobs.bump-job.outputs.new_tag }}
+  release-job:
+    needs:
+      - build-push-job
     uses: ./.github/workflows/release.yml
+    with:
+      tag_to_deploy: ${{ jobs.bump-job.outputs.new_tag }}
+      changelog: ${{ jobs.bump-job.outputs.changelog }}
