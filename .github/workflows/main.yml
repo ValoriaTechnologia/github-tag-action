@@ -27,6 +27,7 @@ jobs:
   release-job:
     needs:
       - build-push-job
+      - bump-job
     uses: ./.github/workflows/release.yml
     with:
       tag_to_deploy: ${{ needs.bump-job.outputs.new_tag }}
