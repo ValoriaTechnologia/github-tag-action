@@ -81,7 +81,7 @@ inputs:
     default: angular
 runs:
   using: docker
-  image: ghcr.io/valoriatechnologia/github-tag-action:v0.0.9
+  image: docker://ghcr.io/valoriatechnologia/github-tag-action:v0.1.0
 branding:
   icon: git-merge
   color: purple
