@@ -1,4 +1,4 @@
-name: "Bump Action"
+name: "Build and Push Action"
 
 on:
   workflow_call:

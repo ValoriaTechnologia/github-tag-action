@@ -22,11 +22,11 @@ jobs:
       - bump-job
     uses: ./.github/workflows/build-push.yml
     with:
-      tag: ${{ jobs.bump-job.outputs.new_tag }}
+      tag: ${{ needs.bump-job.outputs.new_tag }}
   release-job:
     needs:
       - build-push-job
     uses: ./.github/workflows/release.yml
     with:
-      tag_to_deploy: ${{ jobs.bump-job.outputs.new_tag }}
-      changelog: ${{ jobs.bump-job.outputs.changelog }}
+      tag_to_deploy: ${{ needs.bump-job.outputs.new_tag }}
+      changelog: ${{ needs.bump-job.outputs.changelog }}
