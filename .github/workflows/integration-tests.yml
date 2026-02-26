@@ -10,6 +10,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Update action.yml docker version
+        uses: ValoriaTechnologia/FieldChartUpdater@v0.0.2
+        with:
+          file: ./action.yml
+          edits: '[{"path": "runs.image", "value": "Dockerfile"}]'
+
       - id: tag_version
         uses: ./
         with:
