@@ -1,0 +1,11 @@
+name: "Main Pipeline"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  integration-job:
+    uses: ./.github/workflows/tests/integration.yml
+  unit-tests-job:
+    uses: ./.github/workflows/tests/unit.yml
